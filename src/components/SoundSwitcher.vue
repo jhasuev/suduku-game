@@ -13,7 +13,7 @@ const switchSound = (): void => {
 <template>
   <div class="flex">
     <Button
-      v-if="!store.state.soundMuted"
+      v-if="store.state.soundMuted"
       icon="pi pi-volume-off"
       class="p-button-rounded p-button-text p-button-secondary"
       @click="switchSound()"

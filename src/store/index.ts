@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    soundMuted: false,
+    soundMuted: !!+localStorage.soundMuted || false,
     lang: localStorage.lang,
     allowLangs: ['ru', 'en'],
   },
@@ -11,6 +11,7 @@ export default createStore({
   mutations: {
     SET_SOUND_STATE(state, soundState) {
       state.soundMuted = soundState;
+      localStorage.soundMuted = +soundState;
     },
 
     SET_LANG(state, lang) {
