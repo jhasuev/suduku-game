@@ -4,17 +4,29 @@ import HomeView from '../views/HomeView.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView,
   },
   {
     path: '/levels',
-    name: 'levels',
+    name: 'Levels',
     component: () => import('../views/LevelsView.vue'),
   },
   {
+    path: '/level/:type',
+    props: true,
+    name: 'Level',
+    component: () => import('../views/LevelView.vue'),
+  },
+  {
+    path: '/level/:type/:id',
+    props: true,
+    name: 'Game',
+    component: () => import('../views/GameView.vue'),
+  },
+  {
     path: '/about',
-    name: 'about',
+    name: 'About',
     component: () => import('../views/AboutView.vue'),
   },
 ];

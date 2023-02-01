@@ -7,8 +7,6 @@ import LanguageSwitcher from './LanguageSwitcher.vue';
 const router = useRouter();
 const route = useRoute();
 
-// console.log(route.name === 'home');
-
 </script>
 
 <template>
@@ -17,7 +15,7 @@ const route = useRoute();
       icon="pi pi-home"
       class="p-button-rounded p-button-text"
       @click="router.push('/')"
-      :disabled="route.name === 'home'"
+      :disabled="route.name === 'Home'"
     />
 
     <sound-switcher class="ml-auto" />
