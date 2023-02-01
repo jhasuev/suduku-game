@@ -1,19 +1,15 @@
 <script lang="ts" setup>
 import Card from 'primevue/card';
-import { defineProps, withDefaults, useSlots } from 'vue';
+import { defineProps, useSlots } from 'vue';
 import Button from 'primevue/button';
 
 type TProps = {
-  title: string;
-  subtitle: string;
-  backable: boolean;
+  title?: string;
+  subtitle?: string;
+  backable?: boolean;
 };
 
-const props = withDefaults(defineProps<TProps>(), {
-  title: '',
-  subtitle: '',
-  backable: false,
-});
+const props = defineProps<TProps>();
 
 const slots = useSlots();
 
