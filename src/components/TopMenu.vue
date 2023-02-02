@@ -10,7 +10,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <nav class="p-2 mt-1 mb-3 m-auto border-round flex">
+  <nav class="p-2 mt-2 mb-2 m-auto border-round flex shadow-1">
     <Button
       icon="pi pi-home"
       class="p-button-rounded p-button-text"

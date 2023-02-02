@@ -8,7 +8,7 @@ const router = useRouter();
 </script>
 
 <template>
-  <page-layout title="Select a level">
+  <page-layout title="Levels">
     <Button label="Easy" class="w-full mb-2" @click="router.push('/level/easy')" />
     <Button label="Normal" class="w-full mb-2" @click="router.push('/level/normal')" />
     <Button label="Hard" class="w-full mb-2" @click="router.push('/level/hard')" />
