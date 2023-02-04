@@ -13,13 +13,13 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/LevelsView.vue'),
   },
   {
-    path: '/level/:type',
+    path: '/level/:level',
     props: true,
     name: 'Level',
     component: () => import('../views/LevelView.vue'),
   },
   {
-    path: '/level/:type/:id',
+    path: '/level/:level/:id',
     props: true,
     name: 'Game',
     component: () => import('../views/GameView.vue'),

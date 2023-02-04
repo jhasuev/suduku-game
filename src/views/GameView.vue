@@ -3,58 +3,112 @@ import PageLayout from '@/components/PageLayout.vue';
 import Button from 'primevue/button';
 import MatrixTable from '@/components/MatrixTable.vue';
 import OverlayPanel from 'primevue/overlaypanel';
-import { computed, ref, ComputedRef } from 'vue';
+import {
+  computed,
+  ref,
+  Ref,
+  ComputedRef,
+  defineProps,
+  onMounted,
+  watch,
+} from 'vue';
+import { useStore } from 'vuex';
+import { TLevelTypes, TSudokuGrid, TEditableColumnData } from '@/types';
 
-const matrix = [
-  [
-    { num: 1, show: true },
-    { num: 2, show: true },
-    { num: 3, show: false },
-  ],
-  [
-    { num: 4, show: true },
-    { num: 5, show: false },
-    { num: 6, show: true },
-  ],
-  [
-    { num: 7, show: false },
-    { num: 8, show: true },
-    { num: 9, show: false },
-  ],
-];
+type TProps = {
+  level: TLevelTypes,
+  id: string|number,
+};
 
+const props = defineProps<TProps>();
+const store = useStore();
 const op = ref();
+const editableCol: Ref<TEditableColumnData> = ref({
+  rowIndex: -1,
+  colIndex: -1,
+  column: null,
+});
+
+const clearEditableColumn = (): void => {
+  editableCol.value.colIndex = -1;
+  editableCol.value.rowIndex = -1;
+  editableCol.value.column = null;
+};
 
 const overlayToggle = (event: MouseEvent): void => {
   op.value.toggle(event);
 };
 
-const onCellClick = (event: MouseEvent, data: any): void => {
-  console.log(event, data);
+const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
   overlayToggle(event);
+  editableCol.value = data;
 };
 
-const allowedNumbers: ComputedRef<number[]> = computed(() => (
-  Array(matrix.length).fill(0).map((n, i) => i + 1)
+const onClickGuessedNumber = (event: MouseEvent, num: number): void => {
+  overlayToggle(event);
+  console.log(editableCol.value);
+
+  store.commit('SET_MATRIX_NUMBER', {
+    id: +props.id,
+    level: props.level,
+    data: { ...editableCol.value },
+    num,
+  });
+
+  clearEditableColumn();
+};
+
+const matrix: ComputedRef<TSudokuGrid> = computed(() => (
+  store.getters.getGame(props.level, +props.id)?.matrix
 ));
+
+const allowedNumbers: ComputedRef<number[]> = computed(() => (
+  Array(matrix.value.length).fill(0).map((n, i) => i + 1)
+));
+
+const checkWin = (matrixData: TSudokuGrid): boolean => (
+  matrixData.flat().every((c) => {
+    if (c.show) return true;
+    return c.user === c.num;
+  })
+);
+
+const finishGame = (): void => {
+  alert('win!');
+};
+
+watch(() => matrix.value, () => {
+  console.log(matrix.value);
+  if (checkWin(matrix.value)) {
+    finishGame();
+  }
+}, { deep: true });
+
+onMounted(() => {
+  if (!matrix.value?.length) {
+    store.dispatch('CREATE_MATRIX', { level: props.level, id: +props.id });
+  }
+});
 
 </script>
 
 <template>
   <page-layout>
+    {{  matrix  }}
     <matrix-table
+      v-if="matrix?.length"
       :values="matrix"
     >
       <template #column="{ rowIndex, colIndex, column }">
-        <div v-if="column.show" class="cell">
+        <div v-if="column.show" class="column">
           {{ column.num }}
         </div>
         <div
           v-else
-          class="cell cell--invisible"
-          @click="onCellClick($event, { rowIndex, colIndex, column })"
+          class="column column--invisible"
+          @click="onColumnClick($event, { rowIndex, colIndex, column })"
           @keypress="() => {}"
-        ></div>
+        >{{ column.user }}</div>
       </template>
     </matrix-table>
   </page-layout>
@@ -65,7 +119,7 @@ const allowedNumbers: ComputedRef<number[]> = computed(() => (
         v-for="n in allowedNumbers"
         :key="n"
         class="flex-grow-1 p-1 col-4"
-        @click="overlayToggle($event)"
+        @click="onClickGuessedNumber($event, n)"
         @keypress="() => {}"
       >
         <Button
@@ -79,7 +133,7 @@ const allowedNumbers: ComputedRef<number[]> = computed(() => (
 
 <style lang="scss">
 
-.cell {
+.column {
   height: 100%;
   display: flex;
   align-items: center;

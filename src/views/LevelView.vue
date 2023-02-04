@@ -5,7 +5,7 @@ import Button from 'primevue/button';
 import PageLayout from '@/components/PageLayout.vue';
 
 type TProps = {
-  type: string
+  level: string
 };
 
 const props = defineProps<TProps>();
@@ -17,7 +17,7 @@ const router = useRouter();
 <template>
   <page-layout
     title="Select a game"
-    :subtitle='`Selected level "${ props.type }"`'
+    :subtitle='`Selected level "${ props.level }"`'
     backable
   >
     <div class="grid">
