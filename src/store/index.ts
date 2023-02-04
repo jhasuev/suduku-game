@@ -3,30 +3,29 @@ import Sudoku from '@/utils/sudoku';
 
 import { TGameData, TLevelTypes, TMatrixNumSettingType } from '@/types';
 
+const gameCommonParams = {
+  id: -1,
+  matrix: [],
+  percent: 40,
+  startTime: 0,
+  finishTime: 0,
+};
 const gameParamsByLevel = {
   easy: {
-    id: -1,
+    ...gameCommonParams,
     level: 'easy',
     sizes: { x: 3, y: 3 },
     percent: 50,
-    matrix: [],
-    finished: false,
   } as TGameData,
   normal: {
-    id: -1,
+    ...gameCommonParams,
     level: 'normal',
     sizes: { x: 6, y: 6 },
-    percent: 40,
-    matrix: [],
-    finished: false,
   } as TGameData,
   hard: {
-    id: -1,
+    ...gameCommonParams,
     level: 'hard',
     sizes: { x: 9, y: 9 },
-    percent: 40,
-    matrix: [],
-    finished: false,
   } as TGameData,
 };
 
@@ -49,12 +48,12 @@ export default createStore({
     },
   },
   mutations: {
-    SET_SOUND_STATE(state, soundState) {
+    SET_SOUND_STATE(state, soundState: boolean) {
       state.soundMuted = soundState;
       localStorage.soundMuted = +soundState;
     },
 
-    SET_LANG(state, lang) {
+    SET_LANG(state, lang: string) {
       state.lang = lang;
       localStorage.lang = lang;
     },
@@ -64,11 +63,15 @@ export default createStore({
     },
 
     SET_MATRIX_NUMBER(state, data: TMatrixNumSettingType) {
-      console.log(data);
       const game = state.games[data.level].find((g: TGameData) => g.id === data.id) as TGameData;
       if (game.matrix) {
         game.matrix[data.data.rowIndex][data.data.colIndex].user = data.num;
       }
+    },
+
+    FINISH_GAME(state, { level, id }: { level: TLevelTypes, id: number }) {
+      const game = state.games[level].find((g: TGameData) => g.id === id) as TGameData;
+      game.finishTime = Date.now();
     },
   },
   actions: {
@@ -78,7 +81,12 @@ export default createStore({
       const generatedMatrix = Sudoku.generate(params);
       const matrix = Sudoku.hide(generatedMatrix, params.percent);
 
-      commit('SET_MATRIX', { ...params, id, matrix });
+      commit('SET_MATRIX', {
+        ...params,
+        id,
+        matrix,
+        startTime: Date.now(),
+      });
 
       // Math.max(0, ...state.games[params.level].map((g) => +g.id)) + 1
     },

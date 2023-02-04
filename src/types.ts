@@ -26,8 +26,9 @@ export type TGameData = {
   level: TLevelTypes,
   sizes: TSudokuSizes,
   percent: number,
-  matrix?: TSudokuGrid,
-  finished?: boolean,
+  matrix: TSudokuGrid,
+  startTime: number,
+  finishTime: number,
 };
 
 export type TEditableColumnData = {

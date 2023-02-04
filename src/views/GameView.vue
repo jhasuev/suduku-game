@@ -11,9 +11,15 @@ import {
   defineProps,
   onMounted,
   watch,
+  onBeforeUnmount,
 } from 'vue';
 import { useStore } from 'vuex';
-import { TLevelTypes, TSudokuGrid, TEditableColumnData } from '@/types';
+import {
+  TLevelTypes,
+  TSudokuGrid,
+  TEditableColumnData,
+  TGameData,
+} from '@/types';
 
 type TProps = {
   level: TLevelTypes,
@@ -28,6 +34,8 @@ const editableCol: Ref<TEditableColumnData> = ref({
   colIndex: -1,
   column: null,
 });
+let timer: ReturnType<typeof setInterval> = -1;
+const time = ref(0);
 
 const clearEditableColumn = (): void => {
   editableCol.value.colIndex = -1;
@@ -58,8 +66,12 @@ const onClickGuessedNumber = (event: MouseEvent, num: number): void => {
   clearEditableColumn();
 };
 
+const gameData: ComputedRef<TGameData> = computed(() => (
+  store.getters.getGame(props.level, +props.id)
+));
+
 const matrix: ComputedRef<TSudokuGrid> = computed(() => (
-  store.getters.getGame(props.level, +props.id)?.matrix
+  gameData.value?.matrix
 ));
 
 const allowedNumbers: ComputedRef<number[]> = computed(() => (
@@ -74,6 +86,7 @@ const checkWin = (matrixData: TSudokuGrid): boolean => (
 );
 
 const finishGame = (): void => {
+  store.commit('FINISH_GAME', { level: props.level, id: +props.id });
   alert('win!');
 };
 
@@ -87,14 +100,31 @@ watch(() => matrix.value, () => {
 onMounted(() => {
   if (!matrix.value?.length) {
     store.dispatch('CREATE_MATRIX', { level: props.level, id: +props.id });
+
+    timer = setInterval(() => {
+      time.value = ((gameData.value.finishTime || Date.now()) - gameData.value.startTime) / 1000;
+      time.value = Math.floor(time.value);
+    }, 1000);
   }
 });
+
+onBeforeUnmount(() => {
+  clearInterval(timer);
+});
+
+const parseTime = (secs: number) => {
+  const minutes: number = Math.floor(secs / 60);
+  const seconds: number = secs % 60;
+
+  return `${minutes}m ${seconds}s`;
+};
 
 </script>
 
 <template>
   <page-layout>
-    {{  matrix  }}
+    <div class="text-center mb-2"><b>{{ parseTime(time) }}</b></div>
+    <!-- {{  matrix  }} -->
     <matrix-table
       v-if="matrix?.length"
       :values="matrix"
