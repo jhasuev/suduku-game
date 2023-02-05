@@ -114,7 +114,7 @@ watch(() => matrix.value, () => {
   }
 }, { deep: true });
 
-const setTime = (): void => {
+const updateTime = (): void => {
   if (gameData.value) {
     time.value = ((gameData.value.finishTime || Date.now()) - gameData.value.startTime) / 1000;
     time.value = Math.floor(time.value);
@@ -126,9 +126,11 @@ onMounted(() => {
     router.push({ name: 'Levels' });
   } else if (!gameData.value.startTime) {
     store.dispatch('REQUEST_START_GAME', { level: props.level, id: +props.id });
-    timer = setInterval(() => setTime(), 1000);
-  } else {
-    setTime();
+  }
+
+  updateTime();
+  if (!gameData.value.finishTime) {
+    timer = setInterval(() => updateTime(), 1000);
   }
 });
 
