@@ -2,7 +2,8 @@
 import { defineProps, withDefaults } from 'vue';
 
 type TProps = {
-  values: object[];
+  values: object[],
+  disabled?: boolean,
 };
 
 const props = withDefaults(defineProps<TProps>(), {
@@ -12,7 +13,10 @@ const props = withDefaults(defineProps<TProps>(), {
 </script>
 
 <template>
-  <table class="table">
+  <table
+    class="table"
+    :class="{ 'table--disabled': props.disabled }"
+  >
     <tr
       v-for="row, rowIndex in props.values"
       :key="rowIndex"
@@ -40,6 +44,12 @@ const props = withDefaults(defineProps<TProps>(), {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
+
+  &--disabled {
+    filter: blur(1px);
+    opacity: .5;
+    pointer-events: none;
+  }
 
   td {
     border: 1px solid var(--surface-border);

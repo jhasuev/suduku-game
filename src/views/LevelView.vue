@@ -1,16 +1,38 @@
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import {
+  defineProps,
+  onMounted,
+  computed,
+  ComputedRef,
+} from 'vue';
 import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import PageLayout from '@/components/PageLayout.vue';
+import { useStore } from 'vuex';
+import {
+  TGameData,
+} from '@/types';
 
 type TProps = {
   level: string
 };
 
 const props = defineProps<TProps>();
-
 const router = useRouter();
+const store = useStore();
+
+const getLevels: ComputedRef<TGameData[]> = computed(() => (
+  store.getters.getLevels(props.level)
+));
+
+onMounted(() => {
+  if (!getLevels.value.length) {
+    store.dispatch('REQUEST_CREATE_LEVELS', props.level);
+    setTimeout(() => {
+      console.log(getLevels.value);
+    }, 111);
+  }
+});
 
 </script>
 
@@ -20,18 +42,22 @@ const router = useRouter();
     :subtitle='`Selected level "${ props.level }"`'
     backable
   >
+    <!-- {{  getLevels }} -->
     <div class="grid">
       <div
-        v-for="n in 10"
-        :key="n"
-        class="col-4 flex-grow-1"
+        v-for="level in getLevels"
+        :key="level.id"
+        class="col-6 flex-grow-1"
       >
         <Button
-          :icon="n > 2 ? `pi pi-ban` : n > 1 ? `` : 'pi pi-check'"
-          :label="`№ ${n}`"
-          :disabled="n > 2"
+          :icon="`pi ${ level.finishTime ? 'pi-check' : !level.opened ? 'pi-ban': '' }`"
+          :label="`№ ${level.id}`"
+          :disabled="!level.opened"
           class="p-button-sm p-button-outlined p-button-secondary p-2 py-3 w-full"
-          @click="router.push({ name: 'Game', params: { type: props.type, id: n } })"
+          @click="router.push({
+            name: 'Game',
+            params: { type: props.level, id: level.id },
+          })"
         />
       </div>
     </div>

@@ -1,8 +1,11 @@
 <script lang="ts" setup>
+import delay from '@/utils/delay';
 import PageLayout from '@/components/PageLayout.vue';
 import Button from 'primevue/button';
 import MatrixTable from '@/components/MatrixTable.vue';
+import FinishDialog from '@/components/FinishDialog.vue';
 import OverlayPanel from 'primevue/overlaypanel';
+import { useDialog } from 'primevue/usedialog';
 import {
   computed,
   ref,
@@ -20,12 +23,15 @@ import {
   TEditableColumnData,
   TGameData,
 } from '@/types';
+import { useRouter } from 'vue-router';
 
 type TProps = {
   level: TLevelTypes,
   id: string|number,
 };
 
+const dialog = useDialog();
+const router = useRouter();
 const props = defineProps<TProps>();
 const store = useStore();
 const op = ref();
@@ -52,7 +58,7 @@ const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
   editableCol.value = data;
 };
 
-const onClickGuessedNumber = (event: MouseEvent, num: number): void => {
+const onClickGuessedNumber = (event: MouseEvent, num: number|null): void => {
   overlayToggle(event);
   console.log(editableCol.value);
 
@@ -85,9 +91,20 @@ const checkWin = (matrixData: TSudokuGrid): boolean => (
   })
 );
 
-const finishGame = (): void => {
+const finishGame = async (): Promise<void> => {
   store.commit('FINISH_GAME', { level: props.level, id: +props.id });
-  alert('win!');
+
+  await delay(500);
+
+  dialog.open(FinishDialog, {
+    props: {
+      breakpoints: {
+        '100vw': 'var(--game-container-width)',
+      },
+      closable: false,
+      modal: true,
+    },
+  });
 };
 
 watch(() => matrix.value, () => {
@@ -97,14 +114,21 @@ watch(() => matrix.value, () => {
   }
 }, { deep: true });
 
-onMounted(() => {
-  if (!matrix.value?.length) {
-    store.dispatch('CREATE_MATRIX', { level: props.level, id: +props.id });
+const setTime = (): void => {
+  if (gameData.value) {
+    time.value = ((gameData.value.finishTime || Date.now()) - gameData.value.startTime) / 1000;
+    time.value = Math.floor(time.value);
+  }
+};
 
-    timer = setInterval(() => {
-      time.value = ((gameData.value.finishTime || Date.now()) - gameData.value.startTime) / 1000;
-      time.value = Math.floor(time.value);
-    }, 1000);
+onMounted(() => {
+  if (!gameData.value) {
+    router.push({ name: 'Levels' });
+  } else if (!gameData.value.startTime) {
+    store.dispatch('REQUEST_START_GAME', { level: props.level, id: +props.id });
+    timer = setInterval(() => setTime(), 1000);
+  } else {
+    setTime();
   }
 });
 
@@ -124,10 +148,11 @@ const parseTime = (secs: number) => {
 <template>
   <page-layout>
     <div class="text-center mb-2"><b>{{ parseTime(time) }}</b></div>
-    <!-- {{  matrix  }} -->
+    <!-- {{  editableCol  }} -->
     <matrix-table
       v-if="matrix?.length"
       :values="matrix"
+      :disabled="!!gameData.finishTime"
     >
       <template #column="{ rowIndex, colIndex, column }">
         <div v-if="column.show" class="column">
@@ -154,6 +179,17 @@ const parseTime = (secs: number) => {
       >
         <Button
           :label="String(n)"
+          class="p-button-sm p-button-outlined p-button-secondary p-2 w-full"
+        />
+      </div>
+      <div
+        v-if="editableCol.column && editableCol.column.user"
+        class="flex-grow-1 p-1 col-12"
+        @click="onClickGuessedNumber($event, null)"
+        @keypress="() => {}"
+      >
+        <Button
+          label="x"
           class="p-button-sm p-button-outlined p-button-secondary p-2 w-full"
         />
       </div>

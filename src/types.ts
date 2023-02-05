@@ -27,6 +27,7 @@ export type TGameData = {
   sizes: TSudokuSizes,
   percent: number,
   matrix: TSudokuGrid,
+  opened?: boolean,
   startTime: number,
   finishTime: number,
 };
@@ -42,4 +43,9 @@ export type TMatrixNumSettingType = {
   level: TLevelTypes,
   data: TEditableColumnData,
   num: number,
+};
+
+export type TGamePath = {
+  id: number,
+  level: TLevelTypes,
 };

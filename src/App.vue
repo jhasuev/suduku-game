@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import setAutoLang from '@/utils/setAutoLang';
 import TopMenu from '@/components/TopMenu.vue';
+import DynamicDialog from 'primevue/dynamicdialog';
 
 onMounted(() => {
   if (!localStorage.lang) {
@@ -14,5 +15,7 @@ onMounted(() => {
 <template>
   <top-menu />
 
-  <router-view/>
+  <router-view />
+
+  <dynamic-dialog />
 </template>

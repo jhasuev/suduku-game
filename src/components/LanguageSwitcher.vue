@@ -24,7 +24,7 @@ const overlayToggle = (event: MouseEvent): void => {
       v-for="lang in store.state.allowLangs"
       :key="lang"
       icon="pi pi-language"
-      class="p-button-rounded"
+      class="p-button-rounded p-button-sm"
       :class="{ 'p-button-text': lang !== store.state.lang }"
 
       @click="switchLanguage(lang)"
