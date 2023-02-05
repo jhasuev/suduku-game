@@ -129,7 +129,7 @@ onMounted(() => {
   }
 
   updateTime();
-  if (!gameData.value.finishTime) {
+  if (!gameData.value?.finishTime) {
     timer = setInterval(() => updateTime(), 1000);
   }
 });

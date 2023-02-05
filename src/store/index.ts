@@ -103,13 +103,6 @@ export default createStore({
   },
 
   actions: {
-    /*
-      TODO:
-      1) открыл уровни - сразу создаются уровни + игровое поле для выбранного уровня
-      2) открыл игру - начинается игра (таймер startTime заводится)
-      3) закончил игру - заканчивается игра (таймер finishTime заводится)
-      Итого всего 3 экшена для всех этих трех пунктов и все!
-    */
     REQUEST_START_GAME({ commit, getters }, pathData: TGamePath) {
       const game = getters.getGame(pathData.level, pathData.id);
       if (game) {

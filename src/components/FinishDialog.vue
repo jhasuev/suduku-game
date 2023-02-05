@@ -1,13 +1,24 @@
 <script lang="ts" setup>
 import Button from 'primevue/button';
 import { inject } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 const dialogRef: any = inject('dialogRef');
 
+const goToLevel = () => {
+  router.push({ name: 'Level', params: { level: route.params.level } });
+};
+
+const goToHome = () => {
+  router.push({ name: 'Home' });
+};
+
 const onMenuClick = (routerName: string) => {
-  router.push({ name: routerName });
+  if (routerName === 'Home') goToHome();
+  if (routerName === 'Level') goToLevel();
+
   dialogRef.value.close();
 };
 
@@ -19,7 +30,7 @@ const onMenuClick = (routerName: string) => {
   <Button
     label="Select a game"
     class="p-button-sm p-2 w-full mb-2"
-    @click="onMenuClick('Levels')"
+    @click="onMenuClick('Level')"
   />
   <Button
     label="Home"
