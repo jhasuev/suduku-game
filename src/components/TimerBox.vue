@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import parseTime from '@/utils/parseTime';
+import { parseTime } from '@/helpers';
 import {
   ref,
   onMounted,

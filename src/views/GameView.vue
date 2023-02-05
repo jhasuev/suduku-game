@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import delay from '@/utils/delay';
+import { checkWin, delay } from '@/helpers';
 import TimerBox from '@/components/TimerBox.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import MatrixTable from '@/components/MatrixTable.vue';
@@ -76,13 +76,6 @@ const gameData: ComputedRef<TGameData> = computed(() => (
 const matrix: ComputedRef<TSudokuGrid> = computed(() => (
   gameData.value?.matrix
 ));
-
-const checkWin = (matrixData: TSudokuGrid): boolean => (
-  matrixData.flat().every((c) => {
-    if (c.show) return true;
-    return c.user === c.num;
-  })
-);
 
 const finishGame = async (): Promise<void> => {
   store.commit('FINISH_GAME', { level: props.level, id: +props.id });
