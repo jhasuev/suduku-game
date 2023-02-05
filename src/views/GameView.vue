@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import delay from '@/utils/delay';
+import TimerBox from '@/components/TimerBox.vue';
 import PageLayout from '@/components/PageLayout.vue';
-import Button from 'primevue/button';
 import MatrixTable from '@/components/MatrixTable.vue';
 import FinishDialog from '@/components/FinishDialog.vue';
+import SelectNumbers from '@/components/SelectNumbers.vue';
 import OverlayPanel from 'primevue/overlaypanel';
 import { useDialog } from 'primevue/usedialog';
 import {
@@ -14,7 +15,6 @@ import {
   defineProps,
   onMounted,
   watch,
-  onBeforeUnmount,
 } from 'vue';
 import { useStore } from 'vuex';
 import {
@@ -40,8 +40,6 @@ const editableCol: Ref<TEditableColumnData> = ref({
   colIndex: -1,
   column: null,
 });
-let timer: ReturnType<typeof setInterval> = -1;
-const time = ref(0);
 
 const clearEditableColumn = (): void => {
   editableCol.value.colIndex = -1;
@@ -58,9 +56,8 @@ const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
   editableCol.value = data;
 };
 
-const onClickGuessedNumber = (event: MouseEvent, num: number|null): void => {
-  overlayToggle(event);
-  console.log(editableCol.value);
+const onNumberSelected = ({ $event, num }: { $event: MouseEvent, num: number|null}): void => {
+  overlayToggle($event);
 
   store.commit('SET_MATRIX_NUMBER', {
     id: +props.id,
@@ -78,10 +75,6 @@ const gameData: ComputedRef<TGameData> = computed(() => (
 
 const matrix: ComputedRef<TSudokuGrid> = computed(() => (
   gameData.value?.matrix
-));
-
-const allowedNumbers: ComputedRef<number[]> = computed(() => (
-  Array(matrix.value.length).fill(0).map((n, i) => i + 1)
 ));
 
 const checkWin = (matrixData: TSudokuGrid): boolean => (
@@ -108,18 +101,10 @@ const finishGame = async (): Promise<void> => {
 };
 
 watch(() => matrix.value, () => {
-  console.log(matrix.value);
   if (checkWin(matrix.value)) {
     finishGame();
   }
 }, { deep: true });
-
-const updateTime = (): void => {
-  if (gameData.value) {
-    time.value = ((gameData.value.finishTime || Date.now()) - gameData.value.startTime) / 1000;
-    time.value = Math.floor(time.value);
-  }
-};
 
 onMounted(() => {
   if (!gameData.value) {
@@ -127,30 +112,17 @@ onMounted(() => {
   } else if (!gameData.value.startTime) {
     store.dispatch('REQUEST_START_GAME', { level: props.level, id: +props.id });
   }
-
-  updateTime();
-  if (!gameData.value?.finishTime) {
-    timer = setInterval(() => updateTime(), 1000);
-  }
 });
-
-onBeforeUnmount(() => {
-  clearInterval(timer);
-});
-
-const parseTime = (secs: number) => {
-  const minutes: number = Math.floor(secs / 60);
-  const seconds: number = secs % 60;
-
-  return `${minutes}m ${seconds}s`;
-};
 
 </script>
 
 <template>
   <page-layout>
-    <div class="text-center mb-2"><b>{{ parseTime(time) }}</b></div>
-    <!-- {{  editableCol  }} -->
+    <timer-box
+      v-if="gameData"
+      :start-time="gameData.startTime"
+      :finish-time="gameData.finishTime"
+    />
     <matrix-table
       v-if="matrix?.length"
       :values="matrix"
@@ -171,31 +143,11 @@ const parseTime = (secs: number) => {
   </page-layout>
 
   <OverlayPanel ref="op" :show-close-icon="true">
-    <div class="grid">
-      <div
-        v-for="n in allowedNumbers"
-        :key="n"
-        class="flex-grow-1 p-1 col-4"
-        @click="onClickGuessedNumber($event, n)"
-        @keypress="() => {}"
-      >
-        <Button
-          :label="String(n)"
-          class="p-button-sm p-button-outlined p-button-secondary p-2 w-full"
-        />
-      </div>
-      <div
-        v-if="editableCol.column && editableCol.column.user"
-        class="flex-grow-1 p-1 col-12"
-        @click="onClickGuessedNumber($event, null)"
-        @keypress="() => {}"
-      >
-        <Button
-          label="x"
-          class="p-button-sm p-button-outlined p-button-secondary p-2 w-full"
-        />
-      </div>
-    </div>
+    <SelectNumbers
+      :matrix="matrix"
+      :show-clear="!!(editableCol.column && editableCol.column.user)"
+      @selected="onNumberSelected($event)"
+    />
   </OverlayPanel>
 </template>
 
