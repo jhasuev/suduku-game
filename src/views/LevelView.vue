@@ -43,7 +43,7 @@ const onGameClick = (id: number|string): void => {
   <page-layout
     title="Select a game"
     :subtitle='`Selected level "${ props.level }"`'
-    backable
+    backpath="/levels"
   >
     <div class="grid">
       <div

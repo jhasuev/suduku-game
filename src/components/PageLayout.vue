@@ -2,24 +2,38 @@
 import Card from 'primevue/card';
 import { defineProps, useSlots } from 'vue';
 import Button from 'primevue/button';
+import { useRouter } from 'vue-router';
+import useSound from '@/utils/useSound';
+
+const router = useRouter();
 
 type TProps = {
   title?: string;
   subtitle?: string;
-  backable?: boolean;
+  backpath?: string;
 };
 
 const props = defineProps<TProps>();
-
 const slots = useSlots();
+
+const onBackClick = () => {
+  if (props.backpath) {
+    router.push(props.backpath);
+    useSound('backSound');
+  }
+};
 
 </script>
 
 <template>
   <Card style="max-width: var(--game-container-width)" class="m-auto relative">
-    <template v-if="backable" #header>
+    <template v-if="backpath" #header>
       <div class="backable-btn">
-        <Button icon="pi pi-arrow-left" class="p-button-rounded p-button-text p-button-sm" />
+        <Button
+          icon="pi pi-arrow-left"
+          class="p-button-rounded p-button-text p-button-sm"
+          @click="onBackClick"
+        />
       </div>
     </template>
 
@@ -41,7 +55,7 @@ const slots = useSlots();
 
 .backable-btn {
   position: absolute;
-  left: 0;
+  left: 8px;
   top: 10px;
 }
 

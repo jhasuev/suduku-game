@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<TProps>(), {
         v-for="col, colIndex in row"
         :key="colIndex"
       >
-        <div class="table__content p-1">
+        <div class="table__content">
           <slot
             name="column"
             :column="(col as any)"

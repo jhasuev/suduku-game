@@ -56,8 +56,10 @@ const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
   editableCol.value = data;
 };
 
-const onNumberSelected = ({ $event, num }: { $event: MouseEvent, num: number|null}): void => {
-  overlayToggle($event);
+const onNumberSelected = ({ $event, num }: { $event: MouseEvent|null, num: number|null}): void => {
+  if ($event) {
+    overlayToggle($event);
+  }
 
   store.commit('SET_MATRIX_NUMBER', {
     id: +props.id,
@@ -128,6 +130,13 @@ onMounted(() => {
         <div
           v-else
           class="column column--invisible"
+          :class="{
+            'column--selected': (
+              editableCol.rowIndex === rowIndex
+              &&
+              editableCol.colIndex === colIndex
+            )
+          }"
           @click="onColumnClick($event, { rowIndex, colIndex, column })"
           @keypress="() => {}"
         >{{ column.user }}</div>
@@ -154,6 +163,9 @@ onMounted(() => {
 
   font-size: 20px;
 
+  &--selected {
+    border: 2px solid;
+  }
   &--invisible {
     background-color: #f0f0f0;
     color: #3B82F6;
