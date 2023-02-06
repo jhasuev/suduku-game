@@ -5,10 +5,13 @@ import {
   computed,
   ComputedRef,
   defineEmits,
+  onMounted,
+  onBeforeUnmount,
 } from 'vue';
 import {
   TSudokuGrid,
 } from '@/types';
+import useSound from '@/utils/useSound';
 
 type TProps = {
   matrix: TSudokuGrid,
@@ -21,6 +24,14 @@ const emit = defineEmits(['selected']);
 const allowedNumbers: ComputedRef<number[]> = computed(() => (
   Array(props.matrix.length).fill(0).map((n, i) => i + 1)
 ));
+
+onMounted(() => {
+  useSound('popupOpenSound');
+});
+
+onBeforeUnmount(() => {
+  useSound('popupCloseSound');
+});
 
 </script>
 

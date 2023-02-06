@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import Button from 'primevue/button';
-import { inject } from 'vue';
+import { inject, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import useSound from '@/utils/useSound';
 
 const router = useRouter();
 const route = useRoute();
@@ -20,7 +21,12 @@ const onMenuClick = (routerName: string) => {
   if (routerName === 'Level') goToLevel();
 
   dialogRef.value.close();
+  useSound('popupCloseSound');
 };
+
+onMounted(() => {
+  useSound('popupOpenSound');
+});
 
 </script>
 

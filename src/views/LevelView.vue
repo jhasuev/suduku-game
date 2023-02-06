@@ -12,6 +12,7 @@ import { useStore } from 'vuex';
 import {
   TGameData,
 } from '@/types';
+import useSound from '@/utils/useSound';
 
 type TProps = {
   level: string
@@ -28,11 +29,13 @@ const getLevels: ComputedRef<TGameData[]> = computed(() => (
 onMounted(() => {
   if (!getLevels.value.length) {
     store.dispatch('REQUEST_CREATE_LEVELS', props.level);
-    setTimeout(() => {
-      console.log(getLevels.value);
-    }, 111);
   }
 });
+
+const onGameClick = (id: number|string): void => {
+  router.push({ name: 'Game', params: { type: props.level, id } });
+  useSound('buttonSound');
+};
 
 </script>
 
@@ -42,7 +45,6 @@ onMounted(() => {
     :subtitle='`Selected level "${ props.level }"`'
     backable
   >
-    <!-- {{  getLevels }} -->
     <div class="grid">
       <div
         v-for="level in getLevels"
@@ -54,10 +56,7 @@ onMounted(() => {
           :label="`№ ${level.id}`"
           :disabled="!level.opened"
           class="p-button-sm p-button-outlined p-button-secondary p-2 py-3 w-full"
-          @click="router.push({
-            name: 'Game',
-            params: { type: props.level, id: level.id },
-          })"
+          @click="onGameClick(level.id)"
         />
       </div>
     </div>
