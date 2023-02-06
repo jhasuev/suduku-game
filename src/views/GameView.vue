@@ -163,7 +163,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 
-  font-size: 20px;
+  font-size: 18px;
+  font-size: min(6vw, 30px);
 
   &--selected {
     border: 2px solid;
