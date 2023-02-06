@@ -6,6 +6,7 @@ import switchSound from '@/assets/sounds/switchSound.ogg';
 import backSound from '@/assets/sounds/backSound.ogg';
 import popupOpenSound from '@/assets/sounds/popupOpenSound.ogg';
 import popupCloseSound from '@/assets/sounds/popupCloseSound.ogg';
+import finishSound from '@/assets/sounds/finishSound.ogg';
 
 type TSoundTypes =
   'buttonSound'
@@ -14,6 +15,7 @@ type TSoundTypes =
   |'backSound'
   |'popupOpenSound'
   |'popupCloseSound'
+  |'finishSound'
 ;
 
 export default (type: TSoundTypes): void => {
@@ -25,6 +27,7 @@ export default (type: TSoundTypes): void => {
       backSound,
       popupOpenSound,
       popupCloseSound,
+      finishSound,
     }[type];
 
     new Audio(soundsByType).play();

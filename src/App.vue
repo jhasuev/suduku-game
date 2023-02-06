@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { setAutoLang } from '@/helpers';
-import TopMenu from '@/components/TopMenu.vue';
+import TopMenu from '@/components/common/TopMenu.vue';
 import DynamicDialog from 'primevue/dynamicdialog';
 
 onMounted(() => {

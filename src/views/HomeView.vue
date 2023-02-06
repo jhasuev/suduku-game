@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
-import PageLayout from '@/components/PageLayout.vue';
+import PageLayout from '@/components/common/PageLayout.vue';
 import useSound from '@/utils/useSound';
 
 const router = useRouter();

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { checkWin, delay } from '@/helpers';
-import TimerBox from '@/components/TimerBox.vue';
-import PageLayout from '@/components/PageLayout.vue';
-import MatrixTable from '@/components/MatrixTable.vue';
-import FinishDialog from '@/components/FinishDialog.vue';
-import SelectNumbers from '@/components/SelectNumbers.vue';
+import TimerBox from '@/components/common/TimerBox.vue';
+import PageLayout from '@/components/common/PageLayout.vue';
+import MatrixTable from '@/components/common/MatrixTable.vue';
+import FinishDialog from '@/components/dialogs/FinishDialog.vue';
+import SelectNumbers from '@/components/overlays/SelectNumbers.vue';
 import OverlayPanel from 'primevue/overlaypanel';
 import { useDialog } from 'primevue/usedialog';
 import {
@@ -52,8 +52,10 @@ const overlayToggle = (event: MouseEvent): void => {
 };
 
 const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
-  overlayToggle(event);
-  editableCol.value = data;
+  if (!editableCol.value?.column) {
+    overlayToggle(event);
+    editableCol.value = data;
+  }
 };
 
 const onNumberSelected = ({ $event, num }: { $event: MouseEvent|null, num: number|null}): void => {
@@ -82,7 +84,7 @@ const matrix: ComputedRef<TSudokuGrid> = computed(() => (
 const finishGame = async (): Promise<void> => {
   store.commit('FINISH_GAME', { level: props.level, id: +props.id });
 
-  await delay(500);
+  await delay(1500);
 
   dialog.open(FinishDialog, {
     props: {

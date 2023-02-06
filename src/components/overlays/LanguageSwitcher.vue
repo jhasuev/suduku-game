@@ -31,6 +31,6 @@ onBeforeUnmount(() => {
 
     @click="switchLanguage(lang)"
   >
-    <img :src="require(`../assets/img/flags/${lang}.png`)" width="20" :alt="`flag ${lang}`">
+    <img :src="require(`@/assets/img/flags/${lang}.png`)" width="20" :alt="`flag ${lang}`">
   </Button>
 </template>

@@ -25,7 +25,7 @@ const onMenuClick = (routerName: string) => {
 };
 
 onMounted(() => {
-  useSound('popupOpenSound');
+  useSound('finishSound');
 });
 
 </script>

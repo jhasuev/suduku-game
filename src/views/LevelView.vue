@@ -7,7 +7,7 @@ import {
 } from 'vue';
 import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
-import PageLayout from '@/components/PageLayout.vue';
+import PageLayout from '@/components/common/PageLayout.vue';
 import { useStore } from 'vuex';
 import {
   TGameData,
