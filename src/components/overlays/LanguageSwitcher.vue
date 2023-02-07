@@ -3,10 +3,13 @@ import Button from 'primevue/button';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 import useSound from '@/utils/useSound';
+import { useI18n } from 'vue-i18n';
 
+const { locale } = useI18n({ useScope: 'global' });
 const store = useStore();
 
 const switchLanguage = (lang: string): void => {
+  locale.value = lang;
   store.commit('SET_LANG', lang);
   useSound('switchSound');
 };

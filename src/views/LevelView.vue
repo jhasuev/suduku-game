@@ -13,11 +13,13 @@ import {
   TGameData,
 } from '@/types';
 import useSound from '@/utils/useSound';
+import { useI18n } from 'vue-i18n';
 
 type TProps = {
   level: string
 };
 
+const { t } = useI18n();
 const props = defineProps<TProps>();
 const router = useRouter();
 const store = useStore();
@@ -41,8 +43,12 @@ const onGameClick = (id: number|string): void => {
 
 <template>
   <page-layout
-    title="Select a game"
-    :subtitle='`Selected level "${ props.level }"`'
+    :title="t('level.title')"
+    :subtitle="t(
+      'level.subtitle', {
+        level: t(`levels.buttons.${props.level}`),
+      }
+    )"
     backpath="/levels"
   >
     <div class="grid">

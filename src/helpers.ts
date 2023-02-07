@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import store from '@/store/';
+import { useI18n } from 'vue-i18n';
 
 import {
   TSudokuGrid,
@@ -16,10 +17,12 @@ export const delay = (ms: number): Promise<never> => new Promise((resolve) => {
 });
 
 export const parseTime = (secs: number): string => {
+  const { t } = useI18n();
+
   const minutes: number = Math.floor(secs / 60);
   const seconds: number = secs % 60;
 
-  return `${minutes}m ${seconds}s`;
+  return t('game.time', { minutes, seconds });
 };
 
 export const setAutoLang = (): string => {

@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';
+import i18n from '@/utils/i18n/';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -16,4 +17,5 @@ createApp(App)
   .use(DialogService)
   .use(store)
   .use(router)
+  .use(i18n)
   .mount('#app');

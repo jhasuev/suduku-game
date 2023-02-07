@@ -12,6 +12,7 @@ import {
   TSudokuGrid,
 } from '@/types';
 import useSound from '@/utils/useSound';
+import { useI18n } from 'vue-i18n';
 
 type TProps = {
   matrix: TSudokuGrid,
@@ -20,6 +21,7 @@ type TProps = {
 
 const props = defineProps<TProps>();
 const emit = defineEmits(['selected']);
+const { t } = useI18n();
 let selected = false;
 
 const allowedNumbers: ComputedRef<number[]> = computed(() => (
@@ -33,7 +35,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (!selected) {
     useSound('popupCloseSound');
-    emit('selected', { $event: null, num: null });
   }
 });
 
@@ -68,7 +69,7 @@ const onSelect = ($event: MouseEvent, num: number|null) => {
       @keypress="() => {}"
     >
       <Button
-        label="x"
+        :label="t('numbers.clear')"
         class="p-button-sm p-button-outlined p-button-secondary w-full"
       />
     </div>

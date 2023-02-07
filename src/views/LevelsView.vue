@@ -4,7 +4,10 @@ import Button from 'primevue/button';
 import PageLayout from '@/components/common/PageLayout.vue';
 import useSound from '@/utils/useSound';
 import { TLevelTypes } from '@/types';
+import { useI18n } from 'vue-i18n';
+import { computed, ComputedRef } from 'vue';
 
+const { t } = useI18n();
 const router = useRouter();
 
 type TMenuLevelItem = {
@@ -12,11 +15,11 @@ type TMenuLevelItem = {
   param: TLevelTypes,
 }
 
-const levels: TMenuLevelItem[] = [
-  { label: 'Easy', param: 'easy' },
-  { label: 'Normal', param: 'normal' },
-  { label: 'Hard', param: 'hard' },
-];
+const levels: ComputedRef<TMenuLevelItem[]> = computed(() => [
+  { label: t('levels.buttons.easy'), param: 'easy' },
+  { label: t('levels.buttons.normal'), param: 'normal' },
+  { label: t('levels.buttons.hard'), param: 'hard' },
+]);
 
 const onClickMenu = (level: TLevelTypes): void => {
   useSound('buttonSound');
@@ -26,7 +29,7 @@ const onClickMenu = (level: TLevelTypes): void => {
 </script>
 
 <template>
-  <page-layout title="Levels">
+  <page-layout :title="t('levels.title')">
     <Button
       v-for="(level, i) in levels"
       :key="i"

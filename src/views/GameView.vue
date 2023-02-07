@@ -52,10 +52,8 @@ const overlayToggle = (event: MouseEvent): void => {
 };
 
 const onColumnClick = (event: MouseEvent, data: TEditableColumnData): void => {
-  if (!editableCol.value?.column) {
-    overlayToggle(event);
-    editableCol.value = data;
-  }
+  overlayToggle(event);
+  editableCol.value = data;
 };
 
 const onNumberSelected = ({ $event, num }: { $event: MouseEvent|null, num: number|null}): void => {
@@ -146,7 +144,7 @@ onMounted(() => {
     </matrix-table>
   </page-layout>
 
-  <OverlayPanel ref="op" :show-close-icon="true">
+  <OverlayPanel ref="op" :show-close-icon="true" @hide="clearEditableColumn">
     <SelectNumbers
       :matrix="matrix"
       :show-clear="!!(editableCol.column && editableCol.column.user)"
@@ -165,6 +163,7 @@ onMounted(() => {
 
   font-size: 18px;
   font-size: min(6vw, 30px);
+  user-select: none;
 
   &--selected {
     border: 2px solid;
