@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import Button from 'primevue/button';
 import { useStore } from 'vuex';
+import useSound from '@/utils/useSound';
 
 const store = useStore();
 
 const switchSound = (): void => {
+  useSound('switchSound', store.state.soundMuted ? 1 : 0.125);
   store.commit('SET_SOUND_STATE', !store.state.soundMuted);
 };
 

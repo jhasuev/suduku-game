@@ -18,18 +18,18 @@ type TSoundTypes =
   |'finishSound'
 ;
 
-export default (type: TSoundTypes): void => {
-  if (!store.state.soundMuted) {
-    const soundsByType = {
-      buttonSound,
-      selectSound,
-      switchSound,
-      backSound,
-      popupOpenSound,
-      popupCloseSound,
-      finishSound,
-    }[type];
+export default (type: TSoundTypes, volume?:number): void => {
+  const soundsByType = {
+    buttonSound,
+    selectSound,
+    switchSound,
+    backSound,
+    popupOpenSound,
+    popupCloseSound,
+    finishSound,
+  }[type];
 
-    new Audio(soundsByType).play();
-  }
+  const audio = new Audio(soundsByType);
+  audio.volume = volume ?? +!store.state.soundMuted;
+  audio.play();
 };

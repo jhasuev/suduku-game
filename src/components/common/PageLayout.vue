@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import Card from 'primevue/card';
 import { defineProps, useSlots } from 'vue';
-import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
+import Card from 'primevue/card';
+import Button from 'primevue/button';
 import useSound from '@/utils/useSound';
 
 const router = useRouter();
