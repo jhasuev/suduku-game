@@ -3,9 +3,7 @@ import store from '@/store/';
 import { useI18n } from 'vue-i18n';
 import { allowLangs } from '@/configs';
 
-import {
-  TSudokuGrid,
-} from '@/types';
+import { TSudokuGrid } from '@/types';
 
 export const checkWin = (matrixData: TSudokuGrid): boolean => (
   matrixData.flat().every((c) => (

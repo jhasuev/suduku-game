@@ -29,11 +29,10 @@ const getLevels: ComputedRef<TGameData[]> = computed(() => (
 ));
 
 onBeforeMount(() => {
-  console.log(getLevels.value);
-  if (getLevels.value && !getLevels.value.length) {
-    store.dispatch('REQUEST_CREATE_LEVELS', props.level);
-  } else {
+  if (!getLevels.value) {
     router.push({ name: '404' });
+  } else if (!getLevels.value.length) {
+    store.dispatch('REQUEST_CREATE_LEVELS', props.level);
   }
 });
 

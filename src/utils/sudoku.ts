@@ -7,6 +7,7 @@ import {
   TSudokuMatrixRow,
   TSudokuMatrix,
   TSudokuGrid,
+  TSudokuGridCol,
 } from '@/types';
 
 export default class Sudoku {
@@ -72,14 +73,40 @@ export default class Sudoku {
     return matrix;
   }
 
+  static suffle(arr: any): any {
+    return arr.sort(() => (Math.random() > 0.5 ? 1 : -1));
+  }
+
+  static getColumns(matrix: TSudokuGrid): TSudokuGridCol[] {
+    return matrix.flat().reduce(
+      (acc: TSudokuGridCol[], col: TSudokuGridCol) => [...acc, col],
+      [],
+    );
+  }
+
+  static getCountOfColumns(count: number, percent: number): number {
+    return Math[
+      Math.random() > 0.5 ? 'floor' : 'ceil'
+    ]((count / 100) * percent);
+  }
+
   static hide(matrix: TSudokuMatrix, percent: number): TSudokuGrid {
-    const result: TSudokuGrid = matrix.map((row) => row.map((col) => ({
+    const matrixObjects: TSudokuGrid = matrix.map((row) => row.map((col) => ({
       num: col,
-      show: percent < (Math.random() * 100),
+      show: true,
       user: null,
     })));
 
-    return result;
+    const randomizedColumns = Sudoku.suffle(
+      Sudoku.getColumns(matrixObjects),
+    );
+    const countToHide = Sudoku.getCountOfColumns(randomizedColumns.length, percent);
+
+    for (let i = 0; i < countToHide; i++) {
+      randomizedColumns[i].show = false;
+    }
+
+    return matrixObjects;
   }
 
   static getRowNumbers(matrix: TSudokuMatrix, xIndex: number): TSudokuMatrixRow {
