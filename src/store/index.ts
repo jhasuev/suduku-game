@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import VuexPersistence from 'vuex-persist';
 import Sudoku from '@/utils/sudoku';
 
 import {
@@ -7,6 +8,10 @@ import {
   TMatrixNumSettingType,
   TGamePath,
 } from '@/types';
+
+const vuexPersist = new VuexPersistence({
+  storage: window.localStorage,
+});
 
 const gameCommonParams = {
   id: -1,
@@ -36,8 +41,8 @@ const gameParamsByLevel = {
 
 export default createStore({
   state: {
-    soundMuted: !!+localStorage.soundMuted || false as boolean,
-    lang: localStorage.lang as string,
+    soundMuted: false as boolean,
+    lang: '',
     allowLangs: ['ru', 'en'] as string[],
     games: {
       easy: [] as TGameData[],
@@ -45,6 +50,7 @@ export default createStore({
       hard: [] as TGameData[],
     },
   },
+
   getters: {
     getGame(state) {
       return (level: TLevelTypes, id: number) => (
@@ -65,15 +71,14 @@ export default createStore({
       );
     },
   },
+
   mutations: {
     SET_SOUND_STATE(state, soundState: boolean) {
       state.soundMuted = soundState;
-      localStorage.soundMuted = +soundState;
     },
 
     SET_LANG(state, lang: string) {
       state.lang = lang;
-      localStorage.lang = lang;
     },
 
     SET_GAME(state, data: TGameData) {
@@ -123,13 +128,14 @@ export default createStore({
     },
 
     REQUEST_CREATE_LEVELS({ dispatch }, level: TLevelTypes) {
-      // TODO loading start
       for (let i = 0; i < 10; i += 1) {
         dispatch('REQUEST_CREATE_LEVEL', level);
       }
-      // TODO loading end
     },
   },
+
   modules: {
   },
+
+  plugins: [vuexPersist.plugin],
 });
