@@ -22,13 +22,13 @@ const store: Module<TGameState, TGlobalState> = {
   getters: {
     getGame(state) {
       return (level: TLevelTypes, id: number) => (
-        state.games[level].find((game: TGameData) => game.id === id)
+        state.games[level]?.find((game: TGameData) => game.id === id)
       ) as TGameData;
     },
 
     getLevels(state) {
       return (level: TLevelTypes) => (
-        state.games[level].map((game, i) => {
+        state.games[level]?.map((game, i) => {
           const prevGame = state.games[level][i - 1];
 
           return {

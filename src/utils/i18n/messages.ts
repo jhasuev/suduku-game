@@ -50,6 +50,11 @@ export default {
     numbers: {
       clear: 'clear',
     },
+    error404: {
+      title: '404',
+      subtitle: 'Not found',
+      homeBtn: 'Go to home',
+    },
   },
 
   ru: {
@@ -102,6 +107,11 @@ export default {
     },
     numbers: {
       clear: 'очистить',
+    },
+    error404: {
+      title: '404',
+      subtitle: 'Ничего не найдено',
+      homeBtn: 'Перейти на главную',
     },
   },
 };

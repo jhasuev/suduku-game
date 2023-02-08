@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {
   defineProps,
-  onMounted,
+  onBeforeMount,
   computed,
   ComputedRef,
 } from 'vue';
@@ -28,9 +28,12 @@ const getLevels: ComputedRef<TGameData[]> = computed(() => (
   store.getters.getLevels(props.level)
 ));
 
-onMounted(() => {
-  if (!getLevels.value.length) {
+onBeforeMount(() => {
+  console.log(getLevels.value);
+  if (getLevels.value && !getLevels.value.length) {
     store.dispatch('REQUEST_CREATE_LEVELS', props.level);
+  } else {
+    router.push({ name: '404' });
   }
 });
 
