@@ -30,6 +30,6 @@ export default (type: TSoundTypes, volume?:number): void => {
   }[type];
 
   const audio = new Audio(soundsByType);
-  audio.volume = volume ?? +!store.state.soundMuted;
+  audio.volume = volume ?? +!store.state.app.soundMuted;
   audio.play();
 };

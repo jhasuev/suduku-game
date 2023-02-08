@@ -10,11 +10,11 @@ const { locale } = useI18n({ useScope: 'global' });
 const store = useStore();
 
 onMounted(() => {
-  if (!localStorage.lang) {
+  if (!store.state.app.lang) {
     setAutoLang();
   }
 
-  locale.value = store.state.lang;
+  locale.value = store.state.app.lang;
 });
 
 </script>

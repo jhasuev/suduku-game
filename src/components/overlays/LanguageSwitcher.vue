@@ -4,6 +4,7 @@ import { onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 import useSound from '@/utils/useSound';
 import { useI18n } from 'vue-i18n';
+import { allowLangs } from '@/configs';
 
 const { locale } = useI18n({ useScope: 'global' });
 const store = useStore();
@@ -26,11 +27,11 @@ onBeforeUnmount(() => {
 
 <template>
   <Button
-    v-for="lang in store.state.allowLangs"
+    v-for="lang in allowLangs"
     :key="lang"
     icon="pi pi-language"
     class="p-button-rounded p-button-sm"
-    :class="{ 'p-button-text': lang !== store.state.lang }"
+    :class="{ 'p-button-text': lang !== store.state.app.lang }"
 
     @click="switchLanguage(lang)"
   >

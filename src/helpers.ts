@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import store from '@/store/';
 import { useI18n } from 'vue-i18n';
+import { allowLangs } from '@/configs';
 
 import {
   TSudokuGrid,
@@ -26,9 +27,9 @@ export const parseTime = (secs: number): string => {
 };
 
 export const setAutoLang = (): string => {
-  const userLang = store.state.allowLangs.find((code) => (
+  const userLang = allowLangs.find((code) => (
     navigator.language.includes(code)
-  )) ?? store.state.allowLangs[0];
+  )) ?? allowLangs[0];
 
   store.commit('SET_LANG', userLang);
 
