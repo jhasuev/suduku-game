@@ -1,6 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import { TGameData } from '@/types';
 
+export const GAMES_ADDING_COUNT = 10;
+
 const gameCommonParams = {
   id: -1,
   matrix: [],

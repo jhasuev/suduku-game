@@ -105,7 +105,13 @@ onMounted(() => {
   if (!gameData.value) {
     router.push({ name: 'Levels' });
   } else if (!gameData.value.startTime) {
-    store.dispatch('REQUEST_START_GAME', { level: props.level, id: +props.id });
+    if (gameData.value.opened) {
+      store.dispatch('REQUEST_START_GAME', {
+        level: props.level, id: +props.id,
+      });
+    } else {
+      router.push({ name: 'Level', params: { level: props.level } });
+    }
   }
 });
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
-import { setAutoLang } from '@/helpers';
+import { getDetectedLang } from '@/helpers';
 import TopMenu from '@/components/common/TopMenu.vue';
 import DynamicDialog from 'primevue/dynamicdialog';
 import { useI18n } from 'vue-i18n';
@@ -11,7 +11,7 @@ const store = useStore();
 
 onMounted(() => {
   if (!store.state.app.lang) {
-    setAutoLang();
+    store.commit('SET_LANG', getDetectedLang());
   }
 
   locale.value = store.state.app.lang;

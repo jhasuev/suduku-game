@@ -6,7 +6,7 @@ import {
   TGamePath,
 } from '@/types';
 import Sudoku from '@/utils/sudoku';
-import { gameParamsByLevel } from '@/configs';
+import { gameParamsByLevel, GAMES_ADDING_COUNT } from '@/configs';
 import { TGlobalState } from '../../types';
 import { TGameState } from './types';
 
@@ -28,14 +28,7 @@ const store: Module<TGameState, TGlobalState> = {
 
     getLevels(state) {
       return (level: TLevelTypes) => (
-        state.games[level]?.map((game, i) => {
-          const prevGame = state.games[level][i - 1];
-
-          return {
-            ...game,
-            opened: prevGame ? prevGame.finishTime : true,
-          };
-        }) as TGameData[]
+        state.games[level]?.map((game) => game) as TGameData[]
       );
     },
   },
@@ -60,9 +53,17 @@ const store: Module<TGameState, TGlobalState> = {
     },
 
     FINISH_GAME(state, pathData: TGamePath) {
-      const game = state.games[pathData.level].find((g: TGameData) => g.id === pathData.id);
+      const gameIndex = state.games[pathData.level].findIndex(
+        (g: TGameData) => g.id === pathData.id,
+      );
+      const game = state.games[pathData.level][gameIndex];
       if (game) {
         game.finishTime = Date.now();
+
+        const nextGame = state.games[pathData.level][gameIndex + 1];
+        if (nextGame) {
+          nextGame.opened = true;
+        }
       }
     },
   },
@@ -75,21 +76,26 @@ const store: Module<TGameState, TGlobalState> = {
       }
     },
 
-    REQUEST_CREATE_LEVEL({ commit, state }, level: TLevelTypes) {
-      const params = gameParamsByLevel[level];
-      const generatedMatrix = Sudoku.generate(params);
-      const matrix = Sudoku.hide(generatedMatrix, params.percent);
+    REQUEST_CREATE_LEVELS({ commit, getters }, level: TLevelTypes) {
+      const allGames = getters.getLevels(level);
+      const lastGame = allGames[allGames.length - 1];
 
-      commit('SET_GAME', {
-        ...params,
-        id: Math.max(0, ...state.games[params.level].map((g) => +g.id)) + 1,
-        matrix,
-      });
-    },
+      const allIds: number[] = allGames.map((g: TGameData) => +g.id);
+      let lastId: number = Math.max(0, ...allIds) + 1;
 
-    REQUEST_CREATE_LEVELS({ dispatch }, level: TLevelTypes) {
-      for (let i = 0; i < 10; i += 1) {
-        dispatch('REQUEST_CREATE_LEVEL', level);
+      for (let i = 0; i < GAMES_ADDING_COUNT; i += 1) {
+        const params = gameParamsByLevel[level];
+        const generatedMatrix = Sudoku.generate(params);
+        const matrix = Sudoku.hide(generatedMatrix, params.percent);
+
+        commit('SET_GAME', {
+          ...params,
+          id: lastId,
+          matrix,
+          opened: lastGame ? !!lastGame.finishTime && i === 0 : i === 0,
+        });
+
+        lastId += 1;
       }
     },
   },

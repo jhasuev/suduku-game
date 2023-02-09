@@ -18,6 +18,7 @@ export default {
     level: {
       title: 'Select a game',
       subtitle: 'Selected level "{level}"',
+      addMoreBtn: 'Add more',
     },
     game: {
       time: '{minutes}m {seconds}s',
@@ -76,6 +77,7 @@ export default {
     level: {
       title: 'Выберите игру',
       subtitle: 'Выбранный уровень "{level}"',
+      addMoreBtn: 'Добавить еще',
     },
     game: {
       time: '{minutes}м {seconds}с',

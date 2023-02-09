@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import store from '@/store/';
 import { useI18n } from 'vue-i18n';
 import { allowLangs } from '@/configs';
 
@@ -24,12 +23,14 @@ export const parseTime = (secs: number): string => {
   return t('game.time', { minutes, seconds });
 };
 
-export const setAutoLang = (): string => {
+export const getDetectedLang = (): string => {
   const userLang = allowLangs.find((code) => (
     navigator.language.includes(code)
   )) ?? allowLangs[0];
 
-  store.commit('SET_LANG', userLang);
-
   return userLang;
 };
+
+export const suffle = (arr: any[]): any[] => (
+  arr.sort(() => (Math.random() > 0.5 ? 1 : -1))
+);

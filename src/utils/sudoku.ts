@@ -10,6 +10,8 @@ import {
   TSudokuGridCol,
 } from '@/types';
 
+import { suffle } from '@/helpers';
+
 export default class Sudoku {
   static generate(data?: TSudokuParams) {
     const params = {
@@ -73,10 +75,6 @@ export default class Sudoku {
     return matrix;
   }
 
-  static suffle(arr: any): any {
-    return arr.sort(() => (Math.random() > 0.5 ? 1 : -1));
-  }
-
   static getColumns(matrix: TSudokuGrid): TSudokuGridCol[] {
     return matrix.flat().reduce(
       (acc: TSudokuGridCol[], col: TSudokuGridCol) => [...acc, col],
@@ -97,7 +95,7 @@ export default class Sudoku {
       user: null,
     })));
 
-    const randomizedColumns = Sudoku.suffle(
+    const randomizedColumns = suffle(
       Sudoku.getColumns(matrixObjects),
     );
     const countToHide = Sudoku.getCountOfColumns(randomizedColumns.length, percent);

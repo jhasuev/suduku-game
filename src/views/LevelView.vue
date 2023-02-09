@@ -28,6 +28,10 @@ const getLevels: ComputedRef<TGameData[]> = computed(() => (
   store.getters.getLevels(props.level)
 ));
 
+const isAllGamesFinished: ComputedRef<boolean> = computed(() => (
+  getLevels.value.every((game) => !!game.finishTime)
+));
+
 onBeforeMount(() => {
   if (!getLevels.value) {
     router.push({ name: '404' });
@@ -39,6 +43,12 @@ onBeforeMount(() => {
 const onGameClick = (id: number|string): void => {
   router.push({ name: 'Game', params: { type: props.level, id } });
   useSound('buttonSound');
+};
+
+const onClickAddMore = (): void => {
+  if (isAllGamesFinished.value) {
+    store.dispatch('REQUEST_CREATE_LEVELS', props.level);
+  }
 };
 
 </script>
@@ -68,5 +78,13 @@ const onGameClick = (id: number|string): void => {
         />
       </div>
     </div>
+
+    <Button
+      icon="pi pi-plus"
+      :label="t('level.addMoreBtn')"
+      :disabled="!isAllGamesFinished"
+      class="p-button-sm w-full mt-5"
+      @click="onClickAddMore"
+    />
   </page-layout>
 </template>
