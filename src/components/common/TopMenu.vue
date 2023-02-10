@@ -5,14 +5,21 @@ import Button from 'primevue/button';
 import useSound from '@/utils/useSound';
 import LanguageSwitcher from '@/components/overlays/LanguageSwitcher.vue';
 import OverlayPanel from 'primevue/overlaypanel';
+import { useStore } from 'vuex';
 import SoundSwitcher from './SoundSwitcher.vue';
 
 const router = useRouter();
 const route = useRoute();
 const op = ref();
+const store = useStore();
 
 const overlayToggle = (event: MouseEvent): void => {
   op.value.toggle(event);
+};
+
+const onSwitchSoundClick = (): void => {
+  useSound('switchSound', store.state.app.soundMuted ? 1 : 0.125);
+  store.commit('SET_SOUND_STATE', !store.state.app.soundMuted);
 };
 
 </script>
@@ -26,7 +33,11 @@ const overlayToggle = (event: MouseEvent): void => {
       :disabled="route.name === 'Home'"
     />
 
-    <sound-switcher class="ml-auto" />
+    <sound-switcher
+      class="ml-auto"
+      :muted="store.state.app.soundMuted"
+      @toggle="onSwitchSoundClick"
+    />
 
     <Button icon="pi pi-language" class="p-button-rounded p-button-text" @click="overlayToggle" />
     <OverlayPanel ref="op" :show-close-icon="true">
