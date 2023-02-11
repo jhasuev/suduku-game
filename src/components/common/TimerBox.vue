@@ -2,7 +2,7 @@
 import { parseTime } from '@/helpers';
 import {
   ref,
-  onMounted,
+  onBeforeMount,
   onBeforeUnmount,
   defineProps,
 } from 'vue';
@@ -23,7 +23,7 @@ const updateTime = (): void => {
   }
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   updateTime();
   if (!props.finishTime) {
     timer = setInterval(() => updateTime(), 1000);
@@ -37,5 +37,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="text-center mb-2"><b>{{ parseTime(time) }}</b></div>
+  <div class="text-center mb-2">
+    <b>{{ parseTime(time) }}</b>
+  </div>
 </template>

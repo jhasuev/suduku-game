@@ -25,3 +25,9 @@ jest.mock('@/assets/sounds/backSound.ogg', () => audio);
 jest.mock('@/assets/sounds/popupOpenSound.ogg', () => audio);
 jest.mock('@/assets/sounds/popupCloseSound.ogg', () => audio);
 jest.mock('@/assets/sounds/finishSound.ogg', () => audio);
+
+jest.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (key, data) => `${key}${JSON.stringify(data) ?? ''}`,
+  }),
+}));
