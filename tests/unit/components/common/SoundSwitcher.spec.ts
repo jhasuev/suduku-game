@@ -34,7 +34,6 @@ describe('SoundSwitcher', () => {
       },
     });
     expect(wrapper.html()).toContain('pi-volume-off');
-    console.log(wrapper.getCurrentComponent().props.muted);
   });
 
   it('render button when muted prop false', () => {
