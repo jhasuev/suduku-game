@@ -1,5 +1,8 @@
 # suduku-game
 
+## Demo
+https://jhasuev.github.io/suduku-game/dist/index.html
+
 ## Project setup
 ```
 npm install
