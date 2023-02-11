@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunksuduku_game"]=self["webpackChunksuduku_game"]||[]).push([[321],{9321:function(t,u,e){e.r(u),e.d(u,{default:function(){return o}});var n=e(3396),a=e(4870),r=e(5658),s=e(6771);const i=["innerHTML"];var c=(0,n.aZ)({__name:"AboutView",setup(t){const{t:u}=(0,r.QT)();return(t,e)=>((0,n.wg)(),(0,n.j4)(s.Z,{title:(0,a.SU)(u)("about.title")},{default:(0,n.w5)((()=>[(0,n._)("div",{innerHTML:(0,a.SU)(u)("about.content")},null,8,i)])),_:1},8,["title"]))}});const l=c;var o=l}}]);
+//# sourceMappingURL=321.eba8a6c0.js.map
