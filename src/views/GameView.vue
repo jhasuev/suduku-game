@@ -148,15 +148,15 @@ onMounted(() => {
         >{{ column.user }}</div>
       </template>
     </matrix-table>
-  </page-layout>
 
-  <OverlayPanel ref="op" :show-close-icon="true" @hide="clearEditableColumn">
-    <SelectNumbers
-      :matrix="matrix"
-      :show-clear="!!(editableCol.column && editableCol.column.user)"
-      @selected="onNumberSelected($event)"
-    />
-  </OverlayPanel>
+    <OverlayPanel ref="op" :show-close-icon="true" @hide="clearEditableColumn">
+      <SelectNumbers
+        :matrix="matrix"
+        :show-clear="!!(editableCol.column && editableCol.column.user)"
+        @selected="onNumberSelected($event)"
+      />
+    </OverlayPanel>
+  </page-layout>
 </template>
 
 <style lang="scss">

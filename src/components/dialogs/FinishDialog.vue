@@ -36,7 +36,7 @@ onMounted(() => {
   <div class="text-3xl font-bold text-center mb-1">{{ t('finishDialog.title') }}</div>
   <div class="text-sm text-center mb-4">{{ t('finishDialog.subtitle') }}</div>
   <Button
-  :label="t('finishDialog.buttons.level')"
+    :label="t('finishDialog.buttons.level')"
     class="p-button-sm p-2 w-full mb-2"
     @click="onMenuClick('Level')"
   />
