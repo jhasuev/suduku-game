@@ -22,7 +22,11 @@ onMounted(() => {
 <template>
   <top-menu />
 
-  <router-view />
+  <router-view v-slot="{ Component }">
+    <transition mode="out-in" name="slide-toggle" >
+      <component :is="Component" />
+    </transition>
+  </router-view>
 
   <dynamic-dialog />
 </template>

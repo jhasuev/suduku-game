@@ -4,3 +4,14 @@
 body {
   background-color: #eee;
 }
+
+.slide-toggle-leave-active,
+.slide-toggle-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.slide-toggle-enter-from,
+.slide-toggle-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
+}
